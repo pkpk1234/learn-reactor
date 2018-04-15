@@ -14,15 +14,9 @@
     <description>learn Reactor Project</description>
     <url>https://github.com/pkpk1234/learn-reactor.git</url>
 
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>io.projectreactor</groupId>
-                <artifactId>reactor-bom</artifactId>
-                <version>Bismuth-RELEASE</version>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
+    <properties>
+        <java.version>1.8</java.version>
+    </properties>
 
     <dependencies>
         <dependency>
@@ -35,6 +29,18 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>io.projectreactor</groupId>
+                <artifactId>reactor-bom</artifactId>
+                <version>Bismuth-RELEASE</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <build>
         <plugins>
