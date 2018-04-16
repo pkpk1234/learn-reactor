@@ -8,8 +8,15 @@ import reactor.core.publisher.Flux;
  */
 public class BackpressureDemo {
     public static void main(String[] args) {
-        Flux.range(0,1000)
+        //可以观察到明显的限流
+        Flux.range(0,30000)
                 .log()
-                .subscribe(new MyLimitedSubscriber(100));
+                .subscribe(new MyLimitedSubscriber(3000));
+
+        //使用比count还打limiter，相当于不限流
+        System.out.println("use big limiter");
+        Flux.range(0,30000)
+                .log()
+                .subscribe(new MyLimitedSubscriber(300000));
     }
 }
