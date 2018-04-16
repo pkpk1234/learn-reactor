@@ -11,7 +11,7 @@ import reactor.core.publisher.Flux;
  */
 
 @Slf4j
-public class FluxSubScribes {
+public class FluxSubscriber {
     public static void main(String[] args) {
         Flux<String> stringFlow = Flux.just("one", "two", "three");
 
