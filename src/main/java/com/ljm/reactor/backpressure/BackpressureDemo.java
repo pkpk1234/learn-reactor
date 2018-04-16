@@ -13,7 +13,7 @@ public class BackpressureDemo {
                 .log()
                 .subscribe(new MyLimitedSubscriber(3000));
 
-        //使用比count还打limiter，相当于不限流
+        //使用比count还大的limiter，相当于不限流
         System.out.println("use big limiter");
         Flux.range(0,30000)
                 .log()
