@@ -24,5 +24,6 @@ public class FluxWithMySubscriber {
                 () -> System.out.println("-- No Error and Finished --"),
                 integer -> integerMySubscriber.request(5));
         integerFlux.subscribe(integerMySubscriber);
+        System.out.println("this is end of main");
     }
 }
