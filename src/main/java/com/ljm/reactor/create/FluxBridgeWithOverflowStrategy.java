@@ -1,15 +1,15 @@
 package com.ljm.reactor.create;
 
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.FluxSink;
 
 import java.util.List;
 
 /**
  * @author 李佳明 https://github.com/pkpk1234
- * @date 2018-04-16
+ * @date 2018-04-17
  */
-public class FluxBridge {
-
+public class FluxBridgeWithOverflowStrategy {
     private static MyEventProcessor myEventProcessor = new ScheduledSingleListenerEventProcessor();
 
     public static void main(String[] args) {
@@ -27,13 +27,13 @@ public class FluxBridge {
 
                             }
                         }
+
                         public void processComplete() {
                             sink.complete();
                         }
                     });
-        }).log().subscribe(System.out::println);
+        }, FluxSink.OverflowStrategy.ERROR).log().subscribe(System.out::println);
         myEventProcessor.fireEvents("abc", "efg", "123", "456", "end");
         System.out.println("main thread exit");
     }
 }
-
