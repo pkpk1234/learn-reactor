@@ -3,9 +3,7 @@ package com.ljm.reactor.create;
 import reactor.core.publisher.Flux;
 
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -16,15 +14,25 @@ import java.util.concurrent.TimeUnit;
  */
 public class FluxBridge {
 
-    private static MyEventProcessor<String> myEventProcessor = new MyEventProcessor<String>() {
+    private static MyEventProcessor myEventProcessor = new MyEventProcessor() {
 
         private MyEventListener<String> eventListener;
         private ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
 
+        @Override
+        public void register(MyEventListener<String> eventListener) {
+            this.eventListener = eventListener;
+        }
 
         @Override
-        public void fireEvents(List<String> values) {
-            executor.schedule(() -> eventListener.onEvent(values),
+        public void dataChunk(String... values) {
+            executor.schedule(() -> eventListener.onDataChunk(Arrays.asList(values)),
+                    500, TimeUnit.MILLISECONDS);
+        }
+
+        @Override
+        public void processComplete() {
+            executor.schedule(() -> eventListener.processComplete(),
                     500, TimeUnit.MILLISECONDS);
         }
 
@@ -38,8 +46,8 @@ public class FluxBridge {
         Flux.create(sink -> {
             myEventProcessor.register(
                     new MyEventListener<String>() {
-                        @Override
-                        public void onEvent(List<String> chunk) {
+
+                        public void onDataChunk(List<String> chunk) {
                             for (String s : chunk) {
                                 if ("end".equalsIgnoreCase(s)) {
                                     sink.complete();
@@ -56,30 +64,23 @@ public class FluxBridge {
                         }
                     });
         }).log().subscribe(System.out::println);
-        myEventProcessor.fireEvents(Arrays.asList("abc", "efg", "123", "456", "end"));
-        System.out.println("main thread exit");
+        myEventProcessor.dataChunk("abc", "efg", "123", "456", "end");
     }
 }
 
 interface MyEventListener<T> {
-    <T> void onEvent(List<T> event);
+    void onDataChunk(List<T> chunk);
 
-    void onProcessComplete();
+    void processComplete();
 }
 
-abstract class MyEventProcessor<T> {
-    private Set<MyEventListener<T>> listeners = new HashSet<>(10);
+interface MyEventProcessor {
+    void register(MyEventListener<String> eventListener);
 
-    protected void register(MyEventListener<T> eventListener) {
-        this.listeners.add(eventListener);
-    }
+    void dataChunk(String... values);
 
-    protected abstract <T> void fireEvents(List<T> values);
+    void processComplete();
 
-    protected void processComplete() {
-        listeners.forEach(MyEventListener::onProcessComplete);
-    }
-
-    protected abstract void shutdown();
+    void shutdown();
 }
 
