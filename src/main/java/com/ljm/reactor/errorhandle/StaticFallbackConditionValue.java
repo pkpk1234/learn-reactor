@@ -12,7 +12,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class StaticFallbackConditionValue {
     public static void main(String[] args) {
-        //根据异常类型进行判断
+        //1. 根据异常类型进行判断
         Flux<Integer> flux = Flux.just(0)
                 .map(i -> 1 / i)
                 //ArithmeticException异常时返回1
@@ -30,7 +30,7 @@ public class StaticFallbackConditionValue {
         //输出应该为NullPointerException
         stringFlux.log().subscribe(System.out::println);
 
-        //根据Predicate进行判断
+        //2. 根据Predicate进行判断
         AtomicInteger index = new AtomicInteger(0);
         Flux.just(0, 1, 2, 3)
                 .map(i -> {
@@ -39,6 +39,11 @@ public class StaticFallbackConditionValue {
                 })
                 .onErrorReturn(NullPointerException.class, 0)
                 .onErrorReturn(e -> index.get() < 2, 1)
+                //因为上一个onErrorReturn匹配了条件，所以异常传播被关闭，之后的
+                //onErrorReturn不会再被触发
+                .onErrorReturn(e -> index.get() < 1, 2)
+
+                //因为异常类型为NumberFormatException，此处应打印1
                 .log().subscribe(System.out::println);
     }
 }
