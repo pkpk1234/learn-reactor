@@ -21,13 +21,16 @@ public class CheckedExceptionHandle {
                     try {
                         return doSth(s);
                     } catch (FileNotFoundException e) {
+                        // 包装并传播异常
                         throw Exceptions.propagate(e);
                     }
                 });
         //abc、def正常打印，然后打印 参数异常
         flux.subscribe(System.out::println,
                 e -> {
+                    //获取原始受检异常
                     Throwable sourceEx = Exceptions.unwrap(e);
+                    //判断异常类型并处理
                     if (sourceEx instanceof FileNotFoundException) {
                         System.err.println(((FileNotFoundException) sourceEx).getMessage());
                     } else {
