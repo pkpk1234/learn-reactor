@@ -28,6 +28,9 @@ public class SimpleBuffer {
 
         //使用用户自定义的Collection作为buffer
         bufferViaCollection();
+
+        //根据元素满足的条件进行buffer
+        bufferWhile();
         System.out.println("All test success.");
     }
 
@@ -89,5 +92,17 @@ public class SimpleBuffer {
         ).expectNext(new LinkedList<>(Arrays.asList("a", "b", "c")))
                 .expectNext(new LinkedList<>(Arrays.asList("d", "e")))
                 .verifyComplete();
+    }
+
+    private static void bufferWhile() {
+        StepVerifier.create(
+                Flux.just(1, 3, 5, 2, 4, 6, 11, 12, 13)
+                        .bufferWhile(i -> i % 2 == 0)
+        )       //注意：bufferWhile会将满足条件的元素放入List中，直到下一个元素
+                //     不满足条件，所以这里会返回两次，因为6和12之间有一个不满足条件的11
+                .expectNext(new ArrayList<>(Arrays.asList(2, 4, 6)))
+                .expectNext(new ArrayList<>(Arrays.asList(12)))
+                .verifyComplete();
+
     }
 }
