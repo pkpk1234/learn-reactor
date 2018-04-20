@@ -1,7 +1,6 @@
 package com.ljm.reactor.operators;
 
 import reactor.core.publisher.Flux;
-import reactor.core.scheduler.Schedulers;
 import reactor.util.function.Tuple2;
 
 import java.time.Duration;
