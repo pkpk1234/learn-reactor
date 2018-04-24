@@ -8,9 +8,9 @@ import java.util.function.Supplier;
 
 /**
  * defer构造出的Flux流，每次调用subscribe方法时，都
- * 会调用Supplier获取Publisher实例作为输入。如果Supplier每次
- * 返回的实例不同，则相当于延迟获取Flux源数据流。如果每次都返回
- * 相同的实例，则和from(Publisher<? extends T> source)效果一样
+ * 会从Supplier获取Publisher实例作为输入。
+ * 如果Supplier每次返回的实例不同，则可以构造出和subscribe次数相关的Flux源数据流。
+ * 如果每次都返回相同的实例，则和from(Publisher<? extends T> source)效果一样
  *
  * @author 李佳明 https://github.com/pkpk1234
  * @date 2018-04-24

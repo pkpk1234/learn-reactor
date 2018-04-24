@@ -12,7 +12,7 @@ import java.time.Duration;
  */
 public class MergeSequential {
     public static void main(String[] args) throws InterruptedException {
-        Flux<Long> flux1 = Flux.interval(Duration.ofSeconds(1), Duration.ofSeconds(1));
+        Flux<Long> flux1 = Flux.interval(Duration.ofSeconds(1), Duration.ofSeconds(2));
         Flux<Long> flux2 = Flux.interval(Duration.ofSeconds(1), Duration.ofSeconds(1));
         Flux<Long> mergedFlux = Flux.mergeSequential(flux1, flux2);
         mergedFlux.subscribe(System.out::println);
