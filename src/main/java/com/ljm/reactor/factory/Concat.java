@@ -3,9 +3,9 @@ package com.ljm.reactor.factory;
 import reactor.core.publisher.Flux;
 
 /**
- * concat 及其重载方法接收 多个Flux拼接为一个Flux返回，
- * 返回元素时首先返回接收到的第一个Flux流中的元素，直到第一个Flux
- * 流结束之后，才开始返回第二个Flux流中的元素，依次类推...
+ * concat 及其重载方法接收 多个Publisher拼接为一个Flux返回，
+ * 返回元素时首先返回接收到的第一个Publisher流中的元素，直到第一个Publisher
+ * 流结束之后，才开始返回第二个Publisher流中的元素，依次类推...
  * 如果发生异常，Flux流会立刻异常终止
  *
  * @author 李佳明 https://github.com/pkpk1234
