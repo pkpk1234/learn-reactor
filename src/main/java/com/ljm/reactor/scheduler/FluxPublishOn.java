@@ -12,7 +12,7 @@ import java.util.concurrent.CountDownLatch;
 public class FluxPublishOn {
     public static void main(String[] args) throws InterruptedException {
         CountDownLatch countDownLatch = new CountDownLatch(1);
-        Flux.range(1, 1000)
+        Flux.range(1, 20)
                 //使用Schedulers.parallel()线程池执行之后的操作
                 .publishOn(Schedulers.parallel())
                 .doOnComplete(() -> countDownLatch.countDown())
