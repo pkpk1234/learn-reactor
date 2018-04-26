@@ -14,12 +14,12 @@ public class FluxWithLog {
                 new DivideIntegerSupplier(1, 2),
                 new DivideIntegerSupplier(8, 2),
                 new DivideIntegerSupplier(20, 10),
-                new DivideIntegerSupplier(1, 0), //异常数据
+                new DivideIntegerSupplier(1, 0), //异常数据,抛出ArithmeticException
                 new DivideIntegerSupplier(2, 2)
         ).log();
         integerFluxWithException.subscribe(
                 integer -> integer.get(),
-                throwable -> System.out.println("get error" + throwable.getMessage())
+                throwable -> System.out.println("get error " + throwable.getClass().getSimpleName() + " " + throwable.getMessage())
         );
     }
 }
