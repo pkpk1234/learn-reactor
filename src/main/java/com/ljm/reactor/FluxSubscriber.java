@@ -1,6 +1,5 @@
 package com.ljm.reactor;
 
-import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Flux;
 
 /**
@@ -10,7 +9,6 @@ import reactor.core.publisher.Flux;
  * @date 2018-04-16
  */
 
-@Slf4j
 public class FluxSubscriber {
     public static void main(String[] args) {
         Flux<String> stringFlow = Flux.just("one", "two", "three");
