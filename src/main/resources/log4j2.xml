@@ -4,10 +4,21 @@
         <Console name="Console" target="SYSTEM_OUT">
             <PatternLayout pattern="%d{HH:mm:ss} [%t] %-5level %logger{36} - %msg%n"/>
         </Console>
+
+        <Console name="Console2" target="SYSTEM_OUT">
+            <PatternLayout pattern="[%d{yy-MMM-dd HH:mm:ss:SSS}] [%p] [%c{1}:%L] - %m%n"/>
+        </Console>
+
     </appenders>
+
+
     <Loggers>
         <Root level="info">
             <AppenderRef ref="Console"/>
         </Root>
+        <!-- name必须和log方法中category相同 -->
+        <logger level="info" name="myCategory">
+            <AppenderRef ref="Console2"/>
+        </logger>
     </Loggers>
 </configuration>
