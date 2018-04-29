@@ -13,14 +13,14 @@ public class DoOnError {
     public static void main(String[] args) {
 
         //1. 默认doOnError方法
-        Flux<String> flux = Flux.just("0", "1", "2", "abc")
+        Flux<String> flux = Flux.just("0", "1", "2", "abc","3")
                 .map(i -> Integer.parseInt(i) + "")
                 .doOnError(e -> e.printStackTrace())
                 .onErrorReturn("System exception");
         flux.log().subscribe(System.out::println);
 
         //2. 根据异常类型选择doError方法
-        flux = Flux.just("0", "1", "2", "abc")
+        flux = Flux.just("0", "1", "2", "abc","3")
                 .map(i -> Integer.parseInt(i) + "")
                 .doOnError(RuntimeException.class, e -> {
                     System.err.println("发生了RuntimeException");
@@ -37,7 +37,7 @@ public class DoOnError {
 
         //3. 根据Predicate选择doError方法
         //   注意doOnError不会阻止异常传播，所以onErrorReturn可以多次触发
-        flux = Flux.just("0", "1", "2", "abc")
+        flux = Flux.just("0", "1", "2", "abc","3")
                 .map(i -> Integer.parseInt(i) + "")
                 .doOnError(e -> e instanceof Throwable, e -> {
                     System.err.println("异常类型为Throwable");
