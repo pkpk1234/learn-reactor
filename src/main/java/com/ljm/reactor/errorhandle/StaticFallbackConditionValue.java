@@ -22,6 +22,7 @@ public class StaticFallbackConditionValue {
         flux.log().subscribe(System.out::println);
 
         final String nullStr = null;
+        //just不允许对象为null
         Flux<String> stringFlux = Flux.just("")
                 .map(str -> nullStr.toString())
                 //NullPointerException异常时返回字符串NullPointerException
