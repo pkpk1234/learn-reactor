@@ -17,10 +17,10 @@ public class Distinct {
         Flux<Person> just = Flux.just(
                 lijiaming1,
                 lijiaming2,
-                xiaowenjie);
+                xiaowenjie,
+                lijiaming1);
         //使用HashSet去重，重复元素中保留最后一个
         distinctByHashSet(just);
-
         //去掉连续重复的元素，只保留其中第一个元素
         distinctUntilChanged(just);
 
@@ -36,9 +36,10 @@ public class Distinct {
 
     private static void distinctUntilChanged(Flux<Person> just) {
         StepVerifier.create(
-                just.distinct())
+                just.distinctUntilChanged())
                 .expectNext(lijiaming1)
                 .expectNext(xiaowenjie)
+                .expectNext(lijiaming1)
                 .verifyComplete();
     }
 
