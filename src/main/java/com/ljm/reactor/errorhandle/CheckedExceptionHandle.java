@@ -7,7 +7,7 @@ import java.io.FileNotFoundException;
 
 /**
  * 非受检异常会被Reactor传播
- * 而受检异常必须被用户代码try catch，为了使用异常传播机制和异常处理机制，可以使用如下步骤处理：
+ * 为了让受检异常被reactor的异常传播机制和异常处理机制支持，可以使用如下步骤处理：
  * 1. 使用 Exceptions.propagate将受检异常包装为非受检异常并重新抛出传播出去
  * 2. onError、error回调等异常处理操作获取到异常之后，可以调用Exceptions.unwrap取得原受检的异常
  *
@@ -26,7 +26,7 @@ public class CheckedExceptionHandle {
                     }
                 });
         //abc、def正常打印，然后打印 参数异常
-        flux.subscribe(System.out::println,
+        flux.log().subscribe(System.out::println,
                 e -> {
                     //获取原始受检异常
                     Throwable sourceEx = Exceptions.unwrap(e);
@@ -48,3 +48,4 @@ public class CheckedExceptionHandle {
         }
     }
 }
+
