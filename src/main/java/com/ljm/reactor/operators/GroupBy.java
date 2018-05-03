@@ -2,6 +2,7 @@ package com.ljm.reactor.operators;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.GroupedFlux;
+import reactor.core.publisher.Mono;
 
 /**
  * group by 分组
@@ -22,8 +23,16 @@ public class GroupBy {
     }
 
     private static void groupByGender(Flux<Person> persons) {
+        //根据性别分组
         Flux<GroupedFlux<Integer, Person>> groups = persons.groupBy(person -> person.gender);
-        //TODO: 如何对分组进行输出？？？
+        groups.flatMap(
+                groupedFlux ->
+                        //根据性别进行数量计算总数
+                        Mono.just(groupedFlux.key())
+                                .zipWith(groupedFlux.count()))
+
+                .map(keyAndCount -> "key: " + keyAndCount.getT1() + ",count is " + keyAndCount.getT2())
+                .subscribe(System.out::println);
     }
 
     /**
