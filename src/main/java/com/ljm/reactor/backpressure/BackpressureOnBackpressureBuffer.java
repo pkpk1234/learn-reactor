@@ -4,35 +4,33 @@ import org.reactivestreams.Subscription;
 import reactor.core.publisher.BaseSubscriber;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.UnicastProcessor;
+import reactor.core.publisher.WorkQueueProcessor;
 
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.stream.IntStream;
 
 /**
  * @author 李佳明 https://github.com/pkpk1234
  * @date 2018-05-20
  */
-public class BackpressureOnBackpressureError {
+public class BackpressureOnBackpressureBuffer {
     public static void main(String[] args) {
-        ExecutorService threadPool = Executors.newFixedThreadPool(4);
+
         UnicastProcessor<String> hotSource = UnicastProcessor.create();
         Flux<String> hotFlux = hotSource
                 .publish()
                 .autoConnect()
-                .onBackpressureError();
+                .onBackpressureBuffer(10);
 
         CompletableFuture future = CompletableFuture.runAsync(() -> {
-            IntStream.range(0, 50).parallel().forEach(
+            IntStream.range(0, 50).forEach(
                     value -> {
-                        threadPool.submit(() -> hotSource.onNext("value is " + value));
+                        hotSource.onNext("value is " + value);
                     }
             );
         });
-        System.out.println("future run");
 
-        hotFlux.subscribe(new BaseSubscriber<String>() {
+        hotFlux.subscribeWith(WorkQueueProcessor.create("one",4)).subscribe(new BaseSubscriber<String>() {
             @Override
             protected void hookOnSubscribe(Subscription subscription) {
                 request(1);
@@ -41,14 +39,10 @@ public class BackpressureOnBackpressureError {
             @Override
             protected void hookOnNext(String value) {
                 System.out.println("get value " + value);
-            }
 
-            @Override
-            protected void hookOnError(Throwable throwable) {
-                throwable.printStackTrace();
             }
         });
-        System.out.println("shutdown");
-        threadPool.shutdownNow();
+        future.thenRun(() -> hotSource.onComplete());
+        future.join();
     }
 }
