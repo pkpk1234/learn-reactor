@@ -42,11 +42,15 @@ public class MyLimitedSubscriber<T> extends BaseSubscriber<T> {
 
     @Override
     protected void hookOnNext(T value) {
+        //提交任务
         this.threadPool.execute(new MyTask(value));
+        //请求数据
         requestNextDatas();
     }
 
+
     private void requestNextDatas() {
+        //计算请求的数据的范围
         int requestSize = this.maxWaiting - this.threadPool.getQueue().size();
         if (requestSize > 0) {
             System.out.println("Thread Pool can handle,request " + requestSize);
@@ -78,6 +82,8 @@ public class MyLimitedSubscriber<T> extends BaseSubscriber<T> {
                 e.printStackTrace();
             }
             System.out.println("data is " + data);
+            //可以在处理完成数据之后，立刻进行请求，此时Subscriber肯定是能够可以可靠处理数据的
+            //requestNextDatas()或者调用BaseSubscriber#request(1)
         }
 
     }
