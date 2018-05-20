@@ -15,7 +15,7 @@ import java.util.stream.IntStream;
  * @date 2018-05-20
  */
 public class BackpressureOnBackpressureError {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         ExecutorService threadPool = Executors.newFixedThreadPool(4);
         UnicastProcessor<String> hotSource = UnicastProcessor.create();
         Flux<String> hotFlux = hotSource
@@ -48,6 +48,7 @@ public class BackpressureOnBackpressureError {
                 throwable.printStackTrace();
             }
         });
+        Thread.sleep(500);
         System.out.println("shutdown");
         threadPool.shutdownNow();
     }

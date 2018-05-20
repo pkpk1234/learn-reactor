@@ -30,10 +30,10 @@ public class BackpressureOnBackpressureBuffer {
             );
         });
 
-        hotFlux.subscribeWith(WorkQueueProcessor.create("one",4)).subscribe(new BaseSubscriber<String>() {
+        hotFlux.subscribe(new BaseSubscriber<String>() {
             @Override
             protected void hookOnSubscribe(Subscription subscription) {
-                request(1);
+                request(20);
             }
 
             @Override
