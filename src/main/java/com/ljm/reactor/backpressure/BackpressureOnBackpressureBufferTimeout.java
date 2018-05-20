@@ -4,6 +4,7 @@ import org.reactivestreams.Subscription;
 import reactor.core.publisher.BaseSubscriber;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.UnicastProcessor;
+import reactor.core.scheduler.Schedulers;
 
 import java.time.Duration;
 import java.util.concurrent.CompletableFuture;
@@ -20,7 +21,8 @@ public class BackpressureOnBackpressureBufferTimeout {
         Flux<String> hotFlux = hotSource
                 .publish()
                 .autoConnect()
-                .onBackpressureBuffer(Duration.ofMillis(500), 5, s -> {
+                .publishOn(Schedulers.parallel())
+                .onBackpressureBuffer(Duration.ofMillis(1000), 5, s -> {
                 });
 
         CompletableFuture future = CompletableFuture.runAsync(() -> {
@@ -34,7 +36,7 @@ public class BackpressureOnBackpressureBufferTimeout {
         BaseSubscriber<String> subscriber = new BaseSubscriber<String>() {
             @Override
             protected void hookOnSubscribe(Subscription subscription) {
-                request(20);
+                request(5);
             }
 
             @Override
@@ -45,7 +47,6 @@ public class BackpressureOnBackpressureBufferTimeout {
         };
         hotFlux.subscribe(subscriber);
         future.join();
-        Thread.sleep(1000);
         System.out.println("get rest elements from buffer");
         //再次获取10个元素，根据策略应返还最后的10个元素
         subscriber.request(10);
