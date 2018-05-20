@@ -22,7 +22,8 @@ public class BackpressureOnBackpressureBufferTimeout {
                 .publish()
                 .autoConnect()
                 .publishOn(Schedulers.parallel())
-                .onBackpressureBuffer(Duration.ofMillis(1000), 5, s -> {
+                .onBackpressureBuffer(Duration.ofMillis(10), 5, s -> {
+                    System.out.println("ttl " + s);
                 });
 
         CompletableFuture future = CompletableFuture.runAsync(() -> {
@@ -47,6 +48,7 @@ public class BackpressureOnBackpressureBufferTimeout {
         };
         hotFlux.subscribe(subscriber);
         future.join();
+        Thread.sleep(1000);
         System.out.println("get rest elements from buffer");
         //再次获取10个元素，根据策略应返还最后的10个元素
         subscriber.request(10);
