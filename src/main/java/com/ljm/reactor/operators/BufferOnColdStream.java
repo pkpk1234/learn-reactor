@@ -14,7 +14,7 @@ import java.util.LinkedList;
  * @author 李佳明 https://github.com/pkpk1234
  * @date 2018-04-19
  */
-public class SimpleBuffer {
+public class BufferOnColdStream {
 
     private static Flux<String> just = Flux.just("a", "b", "c", "d", "e");
 
