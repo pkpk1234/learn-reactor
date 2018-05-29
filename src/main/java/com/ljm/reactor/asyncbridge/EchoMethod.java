@@ -6,7 +6,7 @@ import java.util.concurrent.TimeUnit;
  * @author 李佳明 https://github.com/pkpk1234
  * @date 2018-05-30
  */
-public class BlockingMethod {
+public class EchoMethod {
     /**
      * 模拟阻塞方法
      *
