@@ -15,12 +15,13 @@ public class EchoMethod {
      * @param timeUnit
      * @return
      */
-    public String echoAfterTime(String str, int delay, TimeUnit timeUnit) {
+    public static String echoAfterTime(String str, int delay, TimeUnit timeUnit) {
         try {
             timeUnit.sleep(delay);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        return "echo " + str;
+        return str;
     }
+
 }
