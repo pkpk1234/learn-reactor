@@ -7,15 +7,15 @@ import java.util.concurrent.TimeUnit;
  * @date 2018-06-01
  */
 public class HomePageService {
-    public static String getUserInfo() {
+    public String getUserInfo() {
         return EchoMethod.echoAfterTime("get user info", 50, TimeUnit.MILLISECONDS);
     }
 
-    public static String getNotice() {
+    public String getNotice() {
         return EchoMethod.echoAfterTime("get notices", 50, TimeUnit.MILLISECONDS);
     }
 
-    public static String getTodos() {
+    public String getTodos(String userInfo) {
         return EchoMethod.echoAfterTime("get todos", 100, TimeUnit.MILLISECONDS);
     }
 
