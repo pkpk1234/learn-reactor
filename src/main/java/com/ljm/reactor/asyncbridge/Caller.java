@@ -26,7 +26,7 @@ public class Caller {
         System.out.println("call methods costs " + stopWatch.getTime() + " mills");
     }
 
-    private static void threadAndCallbackCall() {
+    private static void threadAndCallbackCall() throws InterruptedException {
         //用于让调用者线程等待多个异步任务全部结束
         CountDownLatch ct = new CountDownLatch(3);
         HomePageService homePageService = new HomePageService();
