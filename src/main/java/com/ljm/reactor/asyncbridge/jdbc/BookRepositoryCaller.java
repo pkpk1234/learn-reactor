@@ -2,6 +2,7 @@ package com.ljm.reactor.asyncbridge.jdbc;
 
 import org.apache.commons.lang3.time.StopWatch;
 import reactor.core.publisher.Flux;
+import reactor.core.scheduler.Schedulers;
 
 import java.util.function.Consumer;
 
@@ -19,6 +20,7 @@ public class BookRepositoryCaller {
     }
 
     private static void consumeBooks(Consumer<Book> consumer) {
+        initDataSource();
         BookRepository bookRepository = new BookRepository();
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
@@ -28,6 +30,7 @@ public class BookRepositoryCaller {
     }
 
     private static void consumeBooksAsync(Consumer<Book> consumer) {
+        initScheduler();
         BookAsyncRepository bookAsyncRepository = new BookAsyncRepository();
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
@@ -38,6 +41,21 @@ public class BookRepositoryCaller {
         flux.blockLast();
         stopWatch.stop();
         System.out.println("consumeBooksAsync costs " + stopWatch.getTime() + " mills");
+    }
+
+    private static void initScheduler() {
+        StopWatch stopWatch = new StopWatch();
+        stopWatch.start();
+        Flux<String> stringFlux = Flux.just("1").subscribeOn(Schedulers.parallel());
+        stringFlux.subscribe();
+        stringFlux.blockLast();
+        stopWatch.stop();
+        System.out.println("initScheduler costs " + stopWatch.getTime() + " mills");
+        initDataSource();
+    }
+
+    private static void initDataSource() {
+        H2DataSource.getInstance();
     }
 
 }
