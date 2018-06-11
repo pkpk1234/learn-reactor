@@ -33,7 +33,7 @@ public class BookRepositoryCaller {
         stopWatch.start();
         Flux<Book> flux = bookAsyncRepository
                 .getAllBooksAsync();
-        flux.subscribe(consumer);
+        flux.subscribe(bookConsumer);
         flux.blockLast();
         stopWatch.stop();
         System.out.println("consumeBooksAsync costs " + stopWatch.getTime() + " mills");

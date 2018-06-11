@@ -43,6 +43,6 @@ public class BookAsyncRepository {
                 fluxSink.complete();
             }
         });
-        return objectFlux.subscribeOn(Schedulers.elastic(), false);
+        return objectFlux.subscribeOn(Schedulers.parallel(), false);
     }
 }
