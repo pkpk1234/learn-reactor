@@ -13,7 +13,7 @@ import java.util.List;
  */
 public class BookRepository {
 
-    private static final String SELECTALLBOOKS = "SELECT id ,title FROM BOOK";
+    private static final String SELECTALLBOOKS = "SELECT id ,title,author FROM BOOK";
 
     public List<Book> getAllBooks() {
         List<Book> result = new ArrayList<>(10);
@@ -25,7 +25,8 @@ public class BookRepository {
             while (allBooks.next()) {
                 int id = allBooks.getInt(1);
                 String title = allBooks.getString(2);
-                result.add(new Book(id, title));
+                String author = allBooks.getString(3);
+                result.add(new Book(id, title, author));
             }
         } catch (SQLException e) {
             e.printStackTrace();
