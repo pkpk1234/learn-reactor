@@ -7,12 +7,12 @@ package com.ljm.reactor.asyncbridge.jdbc;
 public class Book {
     private int id;
     private String title;
-    private String author;
+    private int author_id;
 
-    public Book(int id, String title, String author) {
+    public Book(int id, String title, int author_id) {
         this.id = id;
         this.title = title;
-        this.author = author;
+        this.author_id = author_id;
     }
 
     public int getId() {
@@ -31,22 +31,21 @@ public class Book {
         this.title = title;
     }
 
+    public int getAuthor_id() {
+        return author_id;
+    }
+
+    public void setAuthor_id(int author_id) {
+        this.author_id = author_id;
+    }
+
     @Override
     public String toString() {
         return "Book{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
-                ", author='" + author + '\'' +
+                ", author_id=" + author_id +
                 '}';
     }
-
-    public String getAuthor() {
-        return author;
-    }
-
-    public void setAuthor(String author) {
-        this.author = author;
-    }
-
 }
 

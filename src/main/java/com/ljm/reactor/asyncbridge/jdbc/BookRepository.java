@@ -27,8 +27,8 @@ public class BookRepository {
             while (allBooks.next()) {
                 int id = allBooks.getInt(1);
                 String title = allBooks.getString(2);
-                String author = allBooks.getString(3);
-                result.add(new Book(id, title, author));
+                int author_id = allBooks.getInt(3);
+                result.add(new Book(id, title, author_id));
             }
         } catch (SQLException e) {
             e.printStackTrace();

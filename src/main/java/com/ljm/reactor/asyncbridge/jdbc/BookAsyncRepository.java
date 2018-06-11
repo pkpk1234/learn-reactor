@@ -13,7 +13,7 @@ import java.sql.Statement;
  * @date 2018-06-11
  */
 public class BookAsyncRepository {
-    private static final String SELECTALLBOOKS = "SELECT id ,title,author FROM BOOK";
+    private static final String SELECTALLBOOKS = "SELECT id ,title,author_id FROM BOOK";
 
     Flux<Book> getAllBooksAsync() {
 
@@ -26,8 +26,8 @@ public class BookAsyncRepository {
                 while (allBooks.next()) {
                     int id = allBooks.getInt(1);
                     String title = allBooks.getString(2);
-                    String author = allBooks.getString(3);
-                    fluxSink.next(new Book(id, title, author));
+                    int author_id = allBooks.getInt(3);
+                    fluxSink.next(new Book(id, title, author_id));
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
