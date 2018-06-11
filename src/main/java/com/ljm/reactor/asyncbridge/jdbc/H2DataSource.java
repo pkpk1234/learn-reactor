@@ -15,19 +15,25 @@ public class H2DataSource {
     JdbcConnectionPool cp = null;
     private static final H2DataSource INSTANCE = new H2DataSource();
 
-    private static final String CREATE_TABLE = "CREATE TABLE BOOK " +
+    private static final String CREATE_TABLE_AUTHOR = "CREATE TABLE AUTHOR" +
+            "(id INT NOT NULL,name VARCHAR(20) NOT NULL,CONSTRAINT PK_AUTHOR PRIMARY KEY (ID) );";
+    private static final String INSERT_TABLE_AUTHOR = "INSERT INTO AUTHOR(id,name) values" +
+            "(1,'author1')," +
+            "(2,'author2');";
+
+    private static final String CREATE_TABLE_BOOK = "CREATE TABLE BOOK " +
             "(id INT NOT NULL, title VARCHAR(50) " +
-            "NOT NULL, author VARCHAR(20) NOT NULL);";
-    private static final String INIT_INSERTS = "INSERT INTO BOOK(id,title,author) VALUES " +
+            "NOT NULL, author VARCHAR(20) NOT NULL, CONSTRAINT PK_BOOK PRIMARY KEY (ID) );";
+    private static final String INSERT_TABLE_BOOK = "INSERT INTO BOOK(id,title,author) VALUES " +
             "(1,'book1','author1')," +
-            "(2,'book2','author2')," +
-            "(3,'book3','author3')," +
-            "(4,'book4','author4')," +
-            "(5,'book5','author5')," +
-            "(6,'book6','author6')," +
-            "(7,'book7','author7')," +
-            "(8,'book8','author8')," +
-            "(9,'book9','author9');";
+            "(2,'book2','author1')," +
+            "(3,'book3','author1')," +
+            "(4,'book4','author2')," +
+            "(5,'book5','author2')," +
+            "(6,'book6','author2')," +
+            "(7,'book7','author2')," +
+            "(8,'book8','author2')," +
+            "(9,'book9','author2');";
 
     private H2DataSource() {
         cp = JdbcConnectionPool.
@@ -37,8 +43,10 @@ public class H2DataSource {
 
     private void init() {
         try {
-            this.cp.getConnection().createStatement().execute(CREATE_TABLE);
-            this.cp.getConnection().createStatement().execute(INIT_INSERTS);
+            this.cp.getConnection().createStatement().execute(CREATE_TABLE_BOOK);
+            this.cp.getConnection().createStatement().execute(INSERT_TABLE_BOOK);
+            this.cp.getConnection().createStatement().execute(CREATE_TABLE_AUTHOR);
+            this.cp.getConnection().createStatement().execute(INSERT_TABLE_AUTHOR);
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -58,7 +66,7 @@ public class H2DataSource {
     }
 
     public static void main(String[] args) throws SQLException {
-        H2DataSource h2DataSource = new H2DataSource();
+        H2DataSource h2DataSource = H2DataSource.getInstance();
         Connection connection = h2DataSource.getConnection();
         Statement statement = connection.createStatement();
         ResultSet result = statement.executeQuery("SHOW TABLES");
