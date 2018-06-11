@@ -27,10 +27,12 @@ public class AuthorAsyncRepository {
                 while (allAthors.next()) {
                     int id = allAthors.getInt(1);
                     String name = allAthors.getString(2);
+                    //推送数据
                     fluxSink.next(new Author(id, name));
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
+                //传播异常
                 fluxSink.error(e);
             } finally {
                 try {
@@ -40,6 +42,7 @@ public class AuthorAsyncRepository {
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
+                //终止关闭
                 fluxSink.complete();
             }
         });

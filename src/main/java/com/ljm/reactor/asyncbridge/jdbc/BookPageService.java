@@ -17,6 +17,7 @@ public class BookPageService {
     private static Consumer<Author> authorConsumer = author -> System.out.println("\t" + author);
 
     public static void main(String[] args) throws InterruptedException {
+        //初始化数据
         H2DataSource.getInstance();
         initScheduler();
         getPage();
@@ -29,27 +30,6 @@ public class BookPageService {
         stopWatch.start();
         getAuthors();
         getBooks(bookConsumer);
-        stopWatch.stop();
-        System.out.println("getPage costs " + stopWatch.getTime() + " mills");
-    }
-
-    private static void getPageAsync() throws InterruptedException {
-        System.out.println("----------------start get page async----------------");
-
-        CountDownLatch countDownLatch = new CountDownLatch(2);
-        StopWatch stopWatch = new StopWatch();
-        stopWatch.start();
-        AuthorAsyncRepository authorAsyncRepository = new AuthorAsyncRepository();
-        Flux<Author> authorFlux = authorAsyncRepository
-                .getAllAuthorsAsync().doOnComplete(() -> countDownLatch.countDown());
-        authorFlux.subscribe(authorConsumer);
-
-        BookAsyncRepository bookAsyncRepository = new BookAsyncRepository();
-        Flux<Book> flux = bookAsyncRepository
-                .getAllBooksAsync().doOnComplete(() -> countDownLatch.countDown());
-        flux.subscribe(bookConsumer);
-
-        countDownLatch.await();
         stopWatch.stop();
         System.out.println("getPage costs " + stopWatch.getTime() + " mills");
     }
@@ -71,6 +51,26 @@ public class BookPageService {
         bookRepository.getAllBooks().stream().forEach(bookConsumer);
         stopWatch.stop();
         System.out.println("\tgetBooks costs " + stopWatch.getTime() + " mills");
+    }
+
+    private static void getPageAsync() throws InterruptedException {
+        System.out.println("----------------start get page async----------------");
+        CountDownLatch countDownLatch = new CountDownLatch(2);
+        StopWatch stopWatch = new StopWatch();
+        stopWatch.start();
+        AuthorAsyncRepository authorAsyncRepository = new AuthorAsyncRepository();
+        Flux<Author> authorFlux = authorAsyncRepository
+                .getAllAuthorsAsync().doOnComplete(() -> countDownLatch.countDown());
+        authorFlux.subscribe(authorConsumer);
+
+        BookAsyncRepository bookAsyncRepository = new BookAsyncRepository();
+        Flux<Book> flux = bookAsyncRepository
+                .getAllBooksAsync().doOnComplete(() -> countDownLatch.countDown());
+        flux.subscribe(bookConsumer);
+        //等待异步方法都完成
+        countDownLatch.await();
+        stopWatch.stop();
+        System.out.println("getPage costs " + stopWatch.getTime() + " mills");
     }
 
     private static void getAuthosAsync() {
