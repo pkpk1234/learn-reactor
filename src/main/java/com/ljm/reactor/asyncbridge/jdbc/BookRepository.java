@@ -1,5 +1,7 @@
 package com.ljm.reactor.asyncbridge.jdbc;
 
+import reactor.util.function.Tuple2;
+
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -13,7 +15,7 @@ import java.util.List;
  */
 public class BookRepository {
 
-    private static final String SELECTALLBOOKS = "SELECT id ,title,author FROM BOOK";
+    private static final String SELECTALLBOOKS = "SELECT id ,title,author_id FROM BOOK";
 
     public List<Book> getAllBooks() {
         List<Book> result = new ArrayList<>(10);
@@ -41,4 +43,5 @@ public class BookRepository {
         }
         return result;
     }
+
 }

@@ -17,23 +17,23 @@ public class H2DataSource {
 
     private static final String CREATE_TABLE_AUTHOR = "CREATE TABLE AUTHOR" +
             "(id INT NOT NULL,name VARCHAR(20) NOT NULL,CONSTRAINT PK_AUTHOR PRIMARY KEY (ID) );";
-    private static final String INSERT_TABLE_AUTHOR = "INSERT INTO AUTHOR(id,name) values" +
+    private static final String INSERT_TABLE_AUTHOR = "INSERT INTO AUTHOR(id,name) VALUES" +
             "(1,'author1')," +
             "(2,'author2');";
 
     private static final String CREATE_TABLE_BOOK = "CREATE TABLE BOOK " +
             "(id INT NOT NULL, title VARCHAR(50) " +
-            "NOT NULL, author VARCHAR(20) NOT NULL, CONSTRAINT PK_BOOK PRIMARY KEY (ID) );";
-    private static final String INSERT_TABLE_BOOK = "INSERT INTO BOOK(id,title,author) VALUES " +
-            "(1,'book1','author1')," +
-            "(2,'book2','author1')," +
-            "(3,'book3','author1')," +
-            "(4,'book4','author2')," +
-            "(5,'book5','author2')," +
-            "(6,'book6','author2')," +
-            "(7,'book7','author2')," +
-            "(8,'book8','author2')," +
-            "(9,'book9','author2');";
+            "NOT NULL, author_id INT NOT NULL, CONSTRAINT PK_BOOK PRIMARY KEY (ID) );";
+    private static final String INSERT_TABLE_BOOK = "INSERT INTO BOOK(id,title,author_id) VALUES " +
+            "(1,'book1',1)," +
+            "(2,'book2',1)," +
+            "(3,'book3',1)," +
+            "(4,'book4',2)," +
+            "(5,'book5',2)," +
+            "(6,'book6',2)," +
+            "(7,'book7',2)," +
+            "(8,'book8',1)," +
+            "(9,'book9',2);";
 
     private H2DataSource() {
         cp = JdbcConnectionPool.
